@@ -1,0 +1,16 @@
+#sudo apt-get update
+sudo apt-get install python3.10-venv
+python3.10 -m venv .venv_mle-pr-final
+echo "*" >.venv_mle-pr-final/.gitignore
+source venv
+pwd
+read -n 1 -p "Continue (y/n)? " answer
+case ${answer:0:1} in
+    y|Y )
+        pip install -U pip uv
+        pip install -r requirements.txt
+    ;;
+    * )
+        echo not executed: pip install -r requirements.txt
+    ;;
+esac

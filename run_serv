@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+cd services
+pwd
+#sudo chown -R 472:0 grafana/data/
+docker compose --env-file ../env.services --env-file ../.env up

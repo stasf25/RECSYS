@@ -1,0 +1,28 @@
+# Dockerfile
+# пример запуска: docker run --publish 8092:8092
+FROM python:3.10-slim
+LABEL author="mle_20250228_1d75c84a52"
+
+# Копируем в контейнер необходимые файлы
+RUN mkdir -p /services/ml_service
+COPY ./ml_service/common_utils.py /services/ml_service
+COPY ./ml_service/events_store.py /services/ml_service
+COPY requirements.txt /services
+RUN touch /services/.env
+WORKDIR /services
+
+# Устанавливаем окружение внутри контейнера
+ENV VIRTUAL_ENV=/services/.venv
+RUN python3.10 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+RUN pip install -U pip  &&  pip install -r requirements.txt
+
+# порт со стороны контейнера
+EXPOSE $EVENTS_STORE_PORT
+
+# том со стороны контейнера
+#VOLUME /services/models
+
+# команда запуска микросервиса в контейнере
+WORKDIR /services/ml_service
+CMD uvicorn events_store:app --reload --host $APP_HOST --port $EVENTS_STORE_PORT

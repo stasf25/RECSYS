@@ -1,0 +1,1 @@
+{'alpha': 100.0, 'factors': 150, 'iterations': 10, 'regularization': 0.005}

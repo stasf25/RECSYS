@@ -1,0 +1,6 @@
+#!/usr/bin/bash
+./build_serv
+cd airflow
+docker compose build
+cd ..
+#docker system prune

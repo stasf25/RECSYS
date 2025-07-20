@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+cd services
+docker compose --env-file ../env.services --env-file ../.env --file docker-compose_test.yaml down
+docker compose --env-file ../env.services --env-file ../.env down
+cd ../airflow
+docker compose down
+cd ..

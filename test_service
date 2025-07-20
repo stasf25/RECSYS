@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+source venv
+python services/scripts/test_service.py

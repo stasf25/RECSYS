@@ -1,0 +1,14 @@
+export $(cat .env | xargs) &>/dev/null
+export $(cat env.services | xargs) &>/dev/null
+export MLFLOW_S3_ENDPOINT_URL=$AWS_ENDPOINT_URL
+echo STARTING MLFLOW SERVER AT:
+echo HOST:$MLFLOW_SERVER_HOST
+echo PORT:$MLFLOW_SERVER_PORT
+echo S3_BUCKET:$S3_BUCKET_NAME
+echo S3_ENDPOINT:$MLFLOW_S3_ENDPOINT_URL
+echo BACKEND:$DB_DESTINATION_HOST/$DB_DESTINATION_NAME
+mlflow server --host $MLFLOW_SERVER_HOST --port $MLFLOW_SERVER_PORT --gunicorn-opts "--timeout=120" \
+  --backend-store-uri postgresql://$DB_DESTINATION_USER:$DB_DESTINATION_PASSWORD@$DB_DESTINATION_HOST:$DB_DESTINATION_PORT/$DB_DESTINATION_NAME \
+  --serve-artifacts --artifacts-destination s3://$S3_BUCKET_NAME/Diplom/mlruns \
+  --default-artifact-root mlflow-artifacts:/
+  #s3://$S3_BUCKET_NAME/Diplom/mlruns

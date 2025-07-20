@@ -1,0 +1,90 @@
+
+services:
+  recsys-app:
+    image: recsys_app:0
+    #используем файл с переменными среды
+    env_file:
+      - ../.env
+      - ../env.services
+    # передаем в приложение признак, что оно работает в контейнере
+    environment:
+      UNDER_DOCKER: 'yes'
+    # Dockerfile для сборки образа
+    build:
+      dockerfile: Dockerfile
+    # перенаправялем порты
+    ports:
+      - "${RECOMMENDATIONS_PORT}:${RECOMMENDATIONS_PORT}"
+    #volumes:
+    #  - "../logs:/services/logs"
+    hostname: recsys
+
+  events-app:
+    image: events_store:0
+    #используем файл с переменными среды
+    env_file:
+      - ../.env
+      - ../env.services
+    # передаем в приложение признак, что оно работает в контейнере
+    environment:
+      UNDER_DOCKER: 'yes'
+    # Dockerfile для сборки образа
+    build:
+      dockerfile: Dockerfile_events
+    # перенаправялем порты
+    ports:
+      - "${EVENTS_STORE_PORT}:${EVENTS_STORE_PORT}"
+    #volumes:
+    #  - "./models:/services/models"
+    hostname: events
+
+  features-app:
+    image: features_store:0
+    #используем файл с переменными среды
+    env_file:
+      - ../.env
+      - ../env.services
+    # передаем в приложение признак, что оно работает в контейнере
+    environment:
+      UNDER_DOCKER: 'yes'
+    # Dockerfile для сборки образа
+    build:
+      dockerfile: Dockerfile_features
+    # перенаправялем порты
+    ports:
+      - "${FEATURES_STORE_PORT}:${FEATURES_STORE_PORT}"
+    #volumes:
+    #  - "./models:/services/models"
+    hostname: features
+
+
+  # сервис Prometheus:
+  prometheus:
+    image: prom/prometheus
+    env_file:
+      - ../.env
+      - ../env.services
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "${PROMETHEUS_PORT}:${PROMETHEUS_PORT}"
+    volumes:
+      - "./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml"
+    hostname: prometheus
+
+  # GRAFANA
+  grafana:
+    image: grafana/grafana
+    env_file:
+      - ../.env
+      - ../env.services
+    ports:
+      - "${GRAFANA_PORT}:${GRAFANA_PORT}"
+    volumes:
+      - "./grafana/:/home/grafana/volume/"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASS}
+      - GF_PATHS_PROVISIONING=/home/grafana/volume/provisioning
+  #    - GF_PATHS_DATA=/home/grafana/volume/data/
+   

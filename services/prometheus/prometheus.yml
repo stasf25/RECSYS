@@ -1,0 +1,22 @@
+global:
+  # как часто собирать метрики?
+  scrape_interval: 15s
+  
+  # если за это время сборщик не собрал метрики, то процесс прерывается
+  scrape_timeout: 10s
+
+  #convert_classic_histograms_to_nhcb: True
+  
+
+scrape_configs:
+  # имя сборщика
+  - job_name: 'scrapping-main-app'
+
+    # c какой страницы собирать метрики?
+    metrics_path: /metrics
+    scheme: http
+    
+    static_configs:
+    - targets: [recsys:8090]
+    #  labels:  
+    #    handler: /recommendations

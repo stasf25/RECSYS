@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+source venv
+source services/mlflow/run_mlflow_server_remote

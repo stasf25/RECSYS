@@ -1,0 +1,62 @@
+
+services:
+  recsys-app:
+    image: recsys_app:0
+    #используем файл с переменными среды
+    env_file:
+      - ../.env
+      - ../env.services
+    # передаем в приложение признак, что оно работает в контейнере
+    environment:
+      UNDER_DOCKER: 'yes'
+      TEST_MODE:    'yes'
+    # Dockerfile для сборки образа
+    build:
+      dockerfile: Dockerfile
+    # перенаправялем порты
+    ports:
+      - "${RECOMMENDATIONS_PORT}:${RECOMMENDATIONS_PORT}"
+    # директория для журнала работы сервиса
+    volumes:
+      - "../logs:/services/logs"
+    hostname: recsys
+
+  events-app:
+    image: events_store:0
+    #используем файл с переменными среды
+    env_file:
+      - ../.env
+      - ../env.services
+   # передаем в приложение признак, что оно работает в контейнере
+    environment:
+      UNDER_DOCKER: 'yes'
+    # Dockerfile для сборки образа
+    build:
+      dockerfile: Dockerfile_events
+    # перенаправялем порты
+    ports:
+      - "${EVENTS_STORE_PORT}:${EVENTS_STORE_PORT}"
+    #volumes:
+    #  - "./models:/services/models"
+    hostname: events
+
+  features-app:
+    image: features_store:0
+    #используем файл с переменными среды
+    env_file:
+      - ../.env
+      - ../env.services
+    # передаем в приложение признак, что оно работает в контейнере
+    environment:
+      UNDER_DOCKER: 'yes'
+    # Dockerfile для сборки образа
+    build:
+      dockerfile: Dockerfile_features
+    # перенаправялем порты
+    ports:
+      - "${FEATURES_STORE_PORT}:${FEATURES_STORE_PORT}"
+    #volumes:
+    #  - "./models:/services/models"
+    hostname: features
+
+    

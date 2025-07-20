@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+source venv
+export $(cat .env | xargs) &>/dev/null
+export $(cat env.services | xargs) &>/dev/null
+cd services/ml_service/
+pwd
+uvicorn recommendations_service:app --reload --port $RECOMMENDATIONS_PORT --host $APP_HOST

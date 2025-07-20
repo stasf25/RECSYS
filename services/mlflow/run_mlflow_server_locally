@@ -1,0 +1,5 @@
+export $(cat env.services | xargs) &>/dev/null
+mlflow server --host $MLFLOW_SERVER_HOST --port $MLFLOW_SERVER_PORT --gunicorn-opts "--timeout=120"  \
+--backend-store-uri file:./logs/mlflow/backend \
+--serve-artifacts --artifacts-destination file:./logs/mlflow/artifacts \
+--default-artifact-root mlflow-artifacts:/

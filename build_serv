@@ -1,0 +1,4 @@
+#!/usr/bin/bash
+cd services
+docker compose --env-file ../env.services --env-file ../.env build
+cd ..
