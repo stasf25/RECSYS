@@ -5,7 +5,7 @@
 Склонируйте репозиторий проекта:
 
 ```
-https://github.com/stasf25/mle-pr-final.git
+https://github.com/stasf25/RECSYS.git
 ```
 
 ## Активируйте виртуальное окружение
